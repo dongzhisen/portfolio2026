@@ -1,0 +1,15 @@
+# Canvas internal
+.canvas-meta.json
+.design-state.json
+.design.json
+.vite/
+react-vite/
+uploads/
+outputs/
+styles/
+assets/
+
+# Misc
+check-frame.png
+splash-cursor.js
+.DS_Store

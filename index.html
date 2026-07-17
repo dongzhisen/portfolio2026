@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="canvas:aspect-ratio" content="16:9">
+  <title>陆亚飞 — UI/UX 设计师 & AI 产品构建者</title>
+  <meta name="description" content="陆亚飞的个人作品集 — 通过设计与 AI 将复杂产品挑战转化为高保真体验。">
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '"Alibaba PuHuiTi"', '"Source Han Sans"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* ===== Seed Tokens ===== */
+    :root {
+      --seed-bg: #050505;
+      --seed-fg: #FFFFFF;
+      --seed-primary: #2777DE;
+      --seed-accent: #2777DE;
+      --seed-surface: #0A0A0A;
+      --seed-radius: 1rem;
+
+      /* Derived tokens from seeds */
+      --surface-elevated: #111111;
+      --surface-hover: #161616;
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-standard: rgba(255, 255, 255, 0.08);
+      --text-primary: #FFFFFF;
+      --text-secondary: #A1A1AA;
+      --text-tertiary: #71717A;
+      --accent-muted: color-mix(in srgb, var(--seed-accent) 12%, transparent);
+      --accent-glow: color-mix(in srgb, var(--seed-accent) 6%, transparent);
+      --overlay-bg: rgba(0, 0, 0, 0.90);
+    }
+
+    /* ===== Global Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== Alibaba PuHuiTi Font Family ===== */
+    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Heavy.ttf') format('truetype'); font-weight: 900; font-style: normal; font-display: swap; }
+
+    body {
+      background-color: var(--seed-bg);
+      color: var(--text-primary);
+      font-family: 'Alibaba PuHuiTi', 'Inter', system-ui, sans-serif;
+      font-feature-settings: "cv01", "ss03";
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ===== Typography Scale ===== */
+    .text-display {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .text-section-title {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .text-card-title {
+      font-size: 1.25rem;
+      font-weight: 590;
+      line-height: 1.33;
+      letter-spacing: -0.015em;
+    }
+
+    .text-body {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .text-caption {
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--text-tertiary);
+    }
+
+    .text-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .text-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+    /* ===== Section Spacing ===== */
+    .section-padding {
+      padding-top: clamp(4rem, 10vh, 8rem);
+      padding-bottom: clamp(4rem, 10vh, 8rem);
+    }
+
+    .max-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    /* ===== Scroll Reveal ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Stagger Reveal Animation (uses @keyframes to avoid transition conflicts) ===== */
+    @keyframes staggerReveal {
+      0% { opacity: 0; transform: translateY(60px) scale(0.94); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(60px) scale(0.94);
+    }
+
+    .reveal-stagger.visible > *:nth-child(1) { animation: staggerReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0ms forwards; }
+    .reveal-stagger.visible > *:nth-child(2) { animation: staggerReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 150ms forwards; }
+    .reveal-stagger.visible > *:nth-child(3) { animation: staggerReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 300ms forwards; }
+    .reveal-stagger.visible > *:nth-child(4) { animation: staggerReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 450ms forwards; }
+    .reveal-stagger.visible > *:nth-child(5) { animation: staggerReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 600ms forwards; }
+    .reveal-stagger.visible > *:nth-child(6) { animation: staggerReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 750ms forwards; }
+
+    /* ===== Card System ===== */
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-standard);
+      border-radius: var(--seed-radius);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  background 0.4s ease,
+                  border-color 0.4s ease;
+    }
+
+    .card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    /* ===== Buttons ===== */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2.5rem;
+      background: #2777DE;
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: #4A93E8;
+      box-shadow: 0 0 24px rgba(39, 119, 222, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ===== Hero Animation: Linear-style Gradient Sweep ===== */
+    @keyframes heroGradientSweep {
+      0% { background-position: 200% 50%; }
+      100% { background-position: -200% 50%; }
+    }
+
+    .hero-title {
+      display: inline-block;
+      font-family: 'Humnst777 Blk BT', sans-serif;
+      font-weight: 900;
+      font-style: italic;
+      text-align: left;
+      background: linear-gradient(90deg,
+        #2777DE 0%, #6BA3F0 15%, #ffffff 30%,
+        #6BA3F0 45%, #2777DE 60%, #6BA3F0 75%,
+        #ffffff 90%, #6BA3F0 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: heroGradientSweep 5s linear infinite;
+    }
+
+    @keyframes heroReveal {
+      0% { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title { animation: heroReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, heroGradientSweep 5s linear infinite; opacity: 0; }
+    .hero-subtitle { opacity: 0; transform: translateY(18px); animation: heroReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards; }
+    .hero-skills { opacity: 0; transform: translateY(18px); animation: heroReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards; }
+    .hero-buttons { opacity: 0; transform: translateY(18px); animation: heroReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards; }
+
+    /* ===== Tag / Pill ===== */
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      transition: background 0.3s ease, backdrop-filter 0.3s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(5, 5, 5, 0.95);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding: 0.375rem 0;
+    }
+    .nav-links a:hover {
+      color: var(--text-primary) !important;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--seed-accent);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ===== Hero Title: Custom Font ===== */
+    @font-face {
+      font-family: 'Humnst777 Blk BT';
+      src: url('Humnst777-BlkBT-BlackItalic.ttf') format('truetype');
+      font-weight: 900;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    /* ===== SpotlightCard Effect ===== */
+    .card-spotlight {
+      position: relative;
+      border-radius: 1.25rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      background-color: rgba(255,255,255,0.03);
+      overflow: hidden;
+      --mouse-x: 50%;
+      --mouse-y: 50%;
+    }
+    .card-spotlight::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(39, 119, 222, 0.15), transparent 80%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .card-spotlight:hover::before {
+      opacity: 1;
+    }
+
+    /* Profile photo hover micro-animation */
+    .profile-photo-wrap {
+      overflow: hidden;
+      border-radius: 1rem;
+      position: relative;
+    }
+    .profile-photo-wrap img,
+    .profile-photo-wrap svg {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-spotlight:hover .profile-photo-wrap img,
+    .card-spotlight:hover .profile-photo-wrap svg {
+      transform: scale(1.03) translateY(-2px);
+    }
+
+    /* ===== Hero Section ===== */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding-top: 4rem;
+      background-color: #0a0c14;
+      background-image: url('hero-bg.png');
+      background-size: cover;
+      background-position: center right;
+      background-repeat: no-repeat;
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      object-fit: cover;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    /* ===== Hero Animation (legacy) ===== */
+    .philosophy-node {
+      opacity: 0;
+      transform: scale(0.8);
+      animation: nodeReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .philosophy-node:nth-child(1) { animation-delay: 0.4s; }
+    .philosophy-node:nth-child(2) { animation-delay: 0.7s; }
+    .philosophy-node:nth-child(3) { animation-delay: 1.0s; }
+    .philosophy-node:nth-child(4) { animation-delay: 1.3s; }
+    .philosophy-node:nth-child(5) { animation-delay: 1.6s; }
+    .philosophy-node:nth-child(6) { animation-delay: 1.9s; }
+
+    @keyframes nodeReveal {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .philosophy-line {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: lineReveal 0.5s ease forwards;
+    }
+
+    .philosophy-line:nth-of-type(1) { animation-delay: 0.9s; }
+    .philosophy-line:nth-of-type(2) { animation-delay: 1.2s; }
+    .philosophy-line:nth-of-type(3) { animation-delay: 1.5s; }
+    .philosophy-line:nth-of-type(4) { animation-delay: 1.8s; }
+    .philosophy-line:nth-of-type(5) { animation-delay: 2.1s; }
+
+    @keyframes lineReveal {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .node-pulse {
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ===== Project Card ===== */
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--seed-radius);
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .project-card:hover {
+      transform: scale(1.02);
+    }
+
+    .project-card:hover .project-overlay {
+      opacity: 1;
+    }
+
+    .project-card:hover .project-cover {
+      transform: scale(1.05);
+    }
+
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(5, 5, 5, 0.9) 0%, rgba(5, 5, 5, 0.2) 50%, transparent 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .project-cover {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===== Modal ===== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--overlay-bg);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 210;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-standard);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===== Pipeline Step ===== */
+    .pipeline-step {
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .pipeline-step::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 2.5rem;
+      bottom: -1.5rem;
+      width: 1px;
+      background: var(--border-subtle);
+    }
+
+    .pipeline-step:last-child::before {
+      display: none;
+    }
+
+    .pipeline-dot {
+      position: absolute;
+      left: 0;
+      top: 0.35rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background: var(--seed-surface);
+      border: 2px solid var(--border-standard);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.4s ease;
+    }
+
+    .pipeline-step.visible .pipeline-dot {
+      border-color: #2777DE;
+    }
+
+    /* ===== Workflow Hover Interaction ===== */
+    .workflow-layout {
+      display: grid;
+      grid-template-columns: 5fr 9fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .workflow-steps {
+      max-width: 500px;
+    }
+
+    .workflow-step {
+      position: relative;
+      padding: 0.75rem 1.5rem 0.75rem 2rem;
+      cursor: pointer;
+      border-radius: 0.75rem;
+      transition: background 0.3s ease;
+    }
+
+    .workflow-step::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: #2777DE;
+      border-radius: 1.5px;
+      transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .workflow-step:hover::before,
+    .workflow-step.is-active::before {
+      height: 60%;
+    }
+
+    .workflow-step:hover,
+    .workflow-step.is-active {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .workflow-step-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 0.375rem;
+      transition: color 0.3s ease;
+    }
+
+    .workflow-step:hover .workflow-step-title,
+    .workflow-step.is-active .workflow-step-title {
+      color: #2777DE;
+    }
+
+    .workflow-step-desc {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.25);
+      line-height: 1.7;
+      transition: color 0.3s ease;
+    }
+
+    .workflow-step:hover .workflow-step-desc,
+    .workflow-step.is-active .workflow-step-desc {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .workflow-image-panel {
+      position: relative;
+      aspect-ratio: 4/3;
+      border-radius: 1rem;
+      overflow: hidden;
+      background: #0a0a0a;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .workflow-image {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .workflow-image.is-visible {
+      opacity: 1;
+    }
+
+    .workflow-image-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem;
+    }
+
+    .workflow-image-num {
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(180deg, rgba(39,119,222,0.3), rgba(39,119,222,0.05));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .workflow-image-label {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 768px) {
+      .workflow-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .workflow-image-panel {
+        aspect-ratio: 16/9;
+      }
+    }
+
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--seed-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ===== Project Cover ===== */
+    .cover-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: var(--seed-surface);
+      border-radius: var(--seed-radius) var(--seed-radius) 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cover-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .project-card:hover .cover-placeholder {
+      transform: scale(1.05);
+    }
+
+    /* ===== BorderGlow Effect ===== */
+    .border-glow-card {
+      --edge-proximity: 0;
+      --cursor-angle: 45deg;
+      --edge-sensitivity: 30;
+      --color-sensitivity: calc(var(--edge-sensitivity) + 20);
+      --border-radius: 1rem;
+      --glow-padding: 40px;
+      --cone-spread: 25;
+      --fill-opacity: 0.5;
+
+      position: relative;
+      border-radius: var(--border-radius);
+      isolation: isolate;
+      transform: translate3d(0, 0, 0.01px);
+      border: 1px solid rgb(255 255 255 / 8%);
+      overflow: visible;
+
+      --gradient-one: radial-gradient(at 80% 55%, #2777DE 0px, transparent 50%);
+      --gradient-two: radial-gradient(at 69% 34%, #4A93E8 0px, transparent 50%);
+      --gradient-three: radial-gradient(at 8% 6%, #8BB8F0 0px, transparent 50%);
+      --gradient-four: radial-gradient(at 41% 38%, #2777DE 0px, transparent 50%);
+      --gradient-five: radial-gradient(at 86% 85%, #4A93E8 0px, transparent 50%);
+      --gradient-six: radial-gradient(at 82% 18%, #8BB8F0 0px, transparent 50%);
+      --gradient-seven: radial-gradient(at 51% 4%, #4A93E8 0px, transparent 50%);
+      --gradient-base: linear-gradient(#2777DE 0 100%);
+
+      --glow-color: hsl(214deg 71% 52% / 100%);
+      --glow-color-60: hsl(214deg 71% 52% / 60%);
+      --glow-color-50: hsl(214deg 71% 52% / 50%);
+      --glow-color-40: hsl(214deg 71% 52% / 40%);
+      --glow-color-30: hsl(214deg 71% 52% / 30%);
+      --glow-color-20: hsl(214deg 71% 52% / 20%);
+      --glow-color-10: hsl(214deg 71% 52% / 10%);
+    }
+
+    .border-glow-card::before,
+    .border-glow-card::after,
+    .border-glow-card > .edge-light {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      transition: opacity 0.25s ease-out;
+      z-index: -1;
+    }
+
+    .border-glow-card:not(:hover)::before,
+    .border-glow-card:not(:hover)::after,
+    .border-glow-card:not(:hover) > .edge-light {
+      opacity: 0;
+      transition: opacity 0.75s ease-in-out;
+    }
+
+    /* Colored mesh-gradient border */
+    .border-glow-card::before {
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--card-bg, #0A0A0A) 0 100%) padding-box,
+        linear-gradient(rgb(255 255 255 / 0%) 0% 100%) border-box,
+        var(--gradient-one) border-box,
+        var(--gradient-two) border-box,
+        var(--gradient-three) border-box,
+        var(--gradient-four) border-box,
+        var(--gradient-five) border-box,
+        var(--gradient-six) border-box,
+        var(--gradient-seven) border-box,
+        var(--gradient-base) border-box;
+
+      opacity: calc((var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
+
+      mask-image:
+        conic-gradient(
+          from var(--cursor-angle) at center,
+          black calc(var(--cone-spread) * 1%),
+          transparent calc((var(--cone-spread) + 15) * 1%),
+          transparent calc((100 - var(--cone-spread) - 15) * 1%),
+          black calc((100 - var(--cone-spread)) * 1%)
+        );
+    }
+
+    /* Colored mesh-gradient background fill near edges */
+    .border-glow-card::after {
+      border: 1px solid transparent;
+      background:
+        var(--gradient-one) padding-box,
+        var(--gradient-two) padding-box,
+        var(--gradient-three) padding-box,
+        var(--gradient-four) padding-box,
+        var(--gradient-five) padding-box,
+        var(--gradient-six) padding-box,
+        var(--gradient-seven) padding-box,
+        var(--gradient-base) padding-box;
+
+      mask-image:
+        linear-gradient(to bottom, black, black),
+        radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%),
+        radial-gradient(ellipse at 66% 66%, black 5%, transparent 40%),
+        radial-gradient(ellipse at 33% 33%, black 5%, transparent 40%),
+        radial-gradient(ellipse at 66% 33%, black 5%, transparent 40%),
+        radial-gradient(ellipse at 33% 66%, black 5%, transparent 40%),
+        conic-gradient(from var(--cursor-angle) at center, transparent 5%, black 15%, black 85%, transparent 95%);
+
+      mask-composite: subtract, add, add, add, add, add;
+      opacity: calc(var(--fill-opacity, 0.5) * (var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
+      mix-blend-mode: soft-light;
+    }
+
+    /* Outer directional glow */
+    .border-glow-card > .edge-light {
+      inset: calc(var(--glow-padding) * -1);
+      pointer-events: none;
+      z-index: 1;
+      mask-image:
+        conic-gradient(
+          from var(--cursor-angle) at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%
+        );
+      opacity: calc((var(--edge-proximity) - var(--edge-sensitivity)) / (100 - var(--edge-sensitivity)));
+      mix-blend-mode: plus-lighter;
+    }
+
+    .border-glow-card > .edge-light::before {
+      content: "";
+      position: absolute;
+      inset: var(--glow-padding);
+      border-radius: inherit;
+      box-shadow:
+        inset 0 0 0 1px var(--glow-color),
+        inset 0 0 1px 0 var(--glow-color-60),
+        inset 0 0 3px 0 var(--glow-color-50),
+        inset 0 0 6px 0 var(--glow-color-40),
+        inset 0 0 15px 0 var(--glow-color-30),
+        inset 0 0 25px 2px var(--glow-color-20),
+        inset 0 0 50px 2px var(--glow-color-10),
+        0 0 1px 0 var(--glow-color-60),
+        0 0 3px 0 var(--glow-color-50),
+        0 0 6px 0 var(--glow-color-40),
+        0 0 15px 0 var(--glow-color-30),
+        0 0 25px 2px var(--glow-color-20),
+        0 0 50px 2px var(--glow-color-10);
+    }
+
+    .border-glow-inner {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      background: var(--card-bg, #0A0A0A);
+      border-radius: calc(var(--border-radius, 1rem) - 1px);
+    }
+
+    /* Override card backgrounds — glow lives between card border and inner wrapper */
+    .card.border-glow-card {
+      background: transparent !important;
+    }
+
+    /* ===== Project Carousel ===== */
+    .project-carousel {
+      position: relative;
+      width: 100%;
+      height: clamp(500px, 68vh, 680px);
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .project-carousel:active { cursor: grabbing; }
+
+    .carousel-scene {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+    }
+
+    .carousel-card {
+      position: absolute;
+      width: 340px;
+      left: -170px;
+      top: -230px;
+      border-radius: var(--seed-radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #0a0a0a;
+      will-change: transform, opacity, filter;
+      cursor: pointer;
+    }
+
+    .carousel-card .cover-placeholder {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .carousel-card .cover-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .carousel-card .card-body {
+      padding: 1.125rem 1.375rem 1.375rem;
+    }
+
+    .carousel-card .card-body h3 {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .carousel-card .card-body p {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      bottom: 0.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.625rem;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      padding: 0;
+    }
+
+    .carousel-dot.active {
+      background: #2777DE;
+      width: 22px;
+      border-radius: 3px;
+    }
+
+    .carousel-hint {
+      position: absolute;
+      bottom: 0.25rem;
+      right: 0;
+      font-size: 0.6875rem;
+      color: rgba(255,255,255,0.18);
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav" id="nav" data-component="Navigation">
+  <div class="max-container" style="display: flex; align-items: center; justify-content: space-between; height: 4rem;">
+    <a href="#hero" style="text-decoration: none; color: var(--text-primary); font-weight: 600; font-size: 1rem; letter-spacing: -0.01em;">陆亚飞</a>
+
+    <div class="nav-links" style="display: flex; align-items: center; gap: 2rem;">
+      <a href="#hero" style="font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">首页</a>
+      <a href="#about" style="font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">关于我</a>
+      <a href="#workflow" style="font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">思考</a>
+      <a href="#projects" style="font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">项目</a>
+      <a href="#contact" style="font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;">联系我</a>
+    </div>
+  </div>
+</nav>
+
+
+<main data-component="Main">
+
+<!-- ===== HERO ===== -->
+<section id="hero" class="hero-section" data-component="Hero">
+  <!-- Background video -->
+  <video class="hero-video" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+    <source src="hero-video.mp4" type="video/mp4">
+  </video>
+
+  <!-- Top bar: year & credit -->
+  <div style="position: absolute; top: 5rem; left: 0; right: 0; z-index: 3; padding: 0 clamp(1.5rem, 5vw, 4rem); display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); letter-spacing: 0.05em;">2024 — 2026</span>
+    <span style="font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 0.05em;">&#9733;&#9733;&#9733; Design by luyafei</span>
+  </div>
+
+  <!-- Main content -->
+  <div class="hero-content max-container" style="padding: 0 clamp(1.5rem, 5vw, 4rem);">
+    <div style="max-width: 600px; text-align: left;">
+      <!-- PORTAFOLIO with gradient sweep -->
+      <h1 class="hero-title" style="font-size: clamp(3rem, 7vw, 5.5rem); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 0.75rem;">PORTAFOLIO</h1>
+
+      <!-- Subtitle -->
+      <p class="hero-subtitle" style="font-size: clamp(1rem, 2vw, 1.375rem); font-weight: 400; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem;">
+        2026 &middot; 设计作品集
+      </p>
+
+      <!-- Skills line -->
+      <p class="hero-skills" style="font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.8; margin-bottom: 3rem; max-width: 520px;">
+        UI/UX 设计 &middot; Vibe Coding &middot; AIGC 全流程辅助设计 &middot; 产品视觉 &amp; 交互落地
+      </p>
+
+      <!-- CTA buttons -->
+      <div class="hero-buttons" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="#projects" class="btn-primary">查看项目</a>
+        <a href="#contact" class="btn-secondary">联系我</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== ABOUT ME ===== -->
+<section id="about" class="section-padding" data-component="About" style="position: relative; overflow: hidden;">
+  <!-- Waveform decoration on the left -->
+  <img src="about-waveform.png" alt="" style="position: absolute; left: -2%; top: 50%; transform: translateY(-50%); width: 18%; max-width: 280px; opacity: 0.35; pointer-events: none; z-index: 0;" />
+
+  <div class="max-container" style="position: relative; z-index: 1;">
+    <!-- Section Title with 3D cube icon -->
+    <div class="reveal" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 3.5rem;">
+      <img src="about-cube.png" alt="" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;" />
+      <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em;">你好，初次见面</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 3.5rem; align-items: start;" class="about-me-grid">
+
+      <!-- Profile Card with SpotlightCard effect -->
+      <div class="card-spotlight reveal profile-card" style="padding: 1.25rem; transition-delay: 100ms;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; position: relative; z-index: 2;">
+          <span style="font-size: 0.6875rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; font-weight: 500;">2026</span>
+          <span style="font-size: 0.6875rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; font-weight: 500;">Design</span>
+        </div>
+
+        <!-- Profile Photo -->
+        <div class="profile-photo-wrap" style="margin-bottom: 1rem; aspect-ratio: 3/4; background: #0a0a0a;">
+          <img src="profile-photo.png" alt="陆亚飞" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+        </div>
+
+        <!-- Name & Info -->
+        <div style="position: relative; z-index: 2;">
+          <p style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.125rem;">陆亚飞</p>
+          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.3); letter-spacing: 0.08em;">
+            <span style="font-variant-numeric: tabular-nums;">15122556056</span>
+            <span style="margin: 0 0.5rem; color: rgba(255,255,255,0.15);">|</span>
+            <span style="color: rgba(255,255,255,0.45); font-weight: 500; letter-spacing: 0.12em;">UI/UX</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Side: Experience -->
+      <div class="reveal" style="transition-delay: 200ms;">
+        <!-- Highlight badges -->
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem; align-items: baseline;">
+          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 900; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">6</span> <span style="color: var(--text-primary);">年经验</span></span>
+          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 900; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">全链路</span><span style="color: var(--text-primary);">设计师</span></span>
+          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 900; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">AIGC</span> <span style="color: var(--text-primary);">辅助工作</span></span>
+        </div>
+
+        <!-- Work Experience 1 -->
+        <div style="margin-bottom: 2rem;">
+          <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+            <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; font-weight: 300;">2022.1 — 2026.5</span>
+            <span style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">北京华医网科技股份有限公司</span>
+          </div>
+          <p style="font-size: 0.875rem; color: #2777DE; margin-bottom: 0.75rem; font-weight: 500;">UI/UX 设计师</p>
+          <div style="font-size: 0.8125rem; color: #A1A1AA; line-height: 1.85; font-weight: 300;">
+            <p style="margin-bottom: 0.375rem; padding-left: 1rem; text-indent: -1rem;">1. 负责医疗招聘、院内医师规培、医疗继续教育产品 UI/UX 设计，涵盖 B 端管理平台、C 端移动应用及 PC 端。</p>
+            <p style="padding-left: 1rem; text-indent: -1rem;">2. 参与多个 0→1 项目，从需求分析、竞品调研、信息架构、交互设计到视觉设计及开发协作，成功推动产品上线。</p>
+          </div>
+        </div>
+
+        <!-- Work Experience 2 -->
+        <div>
+          <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+            <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; font-weight: 300;">2020.6 — 2022.1</span>
+            <span style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">北京云美家科技有限公司</span>
+          </div>
+          <p style="font-size: 0.875rem; color: #2777DE; margin-bottom: 0.75rem; font-weight: 500;">UI 设计师</p>
+          <div style="font-size: 0.8125rem; color: #A1A1AA; line-height: 1.85; font-weight: 300;">
+            <p style="margin-bottom: 0.375rem; padding-left: 1rem; text-indent: -1rem;">1. 负责百度家装图标设计，为百度家装 App 进行改版设计。</p>
+            <p style="margin-bottom: 0.375rem; padding-left: 1rem; text-indent: -1rem;">2. 负责百度直播广告设计。</p>
+            <p style="padding-left: 1rem; text-indent: -1rem;">3. 建立蓝鲸美家小程序 UI 设计标准，实现跨平台一致性。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    .about-me-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+
+<!-- ===== AI WORKFLOW ===== -->
+<section id="workflow" class="section-padding" data-component="AIWorkflow">
+  <div class="max-container">
+    <p class="text-label reveal" style="margin-bottom: 1rem;">流程</p>
+    <h2 class="reveal" style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; margin-bottom: 3.5rem; transition-delay: 100ms;">我如何用 AI 做设计</h2>
+
+    <div class="workflow-layout reveal" style="transition-delay: 200ms;">
+      <!-- Left: Steps -->
+      <div class="workflow-steps" id="workflowSteps">
+
+        <div class="workflow-step is-active" data-index="0">
+          <div class="workflow-step-title">调研</div>
+          <div class="workflow-step-desc">AI 辅助用户研究、竞品分析与需求探索 — 发现真正值得解决的问题。</div>
+        </div>
+
+        <div class="workflow-step" data-index="1">
+          <div class="workflow-step-title">探索</div>
+          <div class="workflow-step-desc">快速生成多个设计方向 — 借助 AI 扩展解空间，再聚焦到最优方案。</div>
+        </div>
+
+        <div class="workflow-step" data-index="2">
+          <div class="workflow-step-title">原型</div>
+          <div class="workflow-step-desc">创建高保真产品原型，清晰传达体验 — 在流程早期支持更好的决策。</div>
+        </div>
+
+        <div class="workflow-step" data-index="3">
+          <div class="workflow-step-title">Vibe Coding</div>
+          <div class="workflow-step-desc">通过 AI 辅助编码将设计想法转化为交互 Demo — 弥合设计与实现之间的鸿沟。</div>
+        </div>
+
+        <div class="workflow-step" data-index="4">
+          <div class="workflow-step-title">验证</div>
+          <div class="workflow-step-desc">收集反馈、改进方案 — 用真实证据而非假设进行迭代，借助快速 AI 原型驱动。</div>
+        </div>
+
+      </div>
+
+      <!-- Right: Image Panel -->
+      <div class="workflow-image-panel" id="workflowImagePanel">
+        <div class="workflow-image is-visible" data-index="0">
+          <div class="workflow-image-inner">
+            <div class="workflow-image-num">01</div>
+            <div class="workflow-image-label">调 研</div>
+          </div>
+        </div>
+        <div class="workflow-image" data-index="1">
+          <div class="workflow-image-inner">
+            <div class="workflow-image-num">02</div>
+            <div class="workflow-image-label">探 索</div>
+          </div>
+        </div>
+        <div class="workflow-image" data-index="2">
+          <div class="workflow-image-inner">
+            <div class="workflow-image-num">03</div>
+            <div class="workflow-image-label">原 型</div>
+          </div>
+        </div>
+        <div class="workflow-image" data-index="3">
+          <div class="workflow-image-inner">
+            <div class="workflow-image-num">04</div>
+            <div class="workflow-image-label">VIBE CODING</div>
+          </div>
+        </div>
+        <div class="workflow-image" data-index="4">
+          <div class="workflow-image-inner">
+            <div class="workflow-image-num">05</div>
+            <div class="workflow-image-label">验 证</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects" class="section-padding" data-component="Projects">
+  <div class="max-container">
+    <p class="text-label reveal" style="margin-bottom: 1rem;">作品</p>
+    <h2 class="reveal" style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; margin-bottom: 3rem; transition-delay: 100ms;">精选项目</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;" id="projectGrid" class="reveal-stagger">
+      <!-- Project 1: 华医人才 -->
+      <div class="project-card card border-glow-card" onclick="openModal(0)" style="padding: 0;">
+        <span class="edge-light"></span>
+        <div class="border-glow-inner">
+        <div class="cover-placeholder">
+          <img src="projects/medtalent/%E5%8D%8E%E5%8C%BB%E4%BA%BA%E6%89%8D01.png" alt="华医人才" />
+        </div>
+        <div class="project-overlay">
+          <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
+        </div>
+        <div style="padding: 1.25rem 1.5rem 1.5rem;">
+          <h3 class="text-card-title" style="margin-bottom: 0.375rem;">华医人才</h3>
+          <p class="text-body" style="font-size: 0.875rem; margin-bottom: 1rem;">医疗招聘平台 0–1 设计</p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="tag">B2B</span>
+            <span class="tag">B2C</span>
+            <span class="tag">0-1 产品设计</span>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Project 2: 住院医师 3.0 -->
+      <div class="project-card card border-glow-card" onclick="openModal(1)" style="padding: 0;">
+        <span class="edge-light"></span>
+        <div class="border-glow-inner">
+        <div class="cover-placeholder">
+          <img src="projects/resident/%E4%BD%8F%E9%99%A2%E5%8C%BB%E5%B8%8801.png" alt="住院医师 3.0" />
+        </div>
+        <div class="project-overlay">
+          <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
+        </div>
+        <div style="padding: 1.25rem 1.5rem 1.5rem;">
+          <h3 class="text-card-title" style="margin-bottom: 0.375rem;">住院医师 3.0</h3>
+          <p class="text-body" style="font-size: 0.875rem; margin-bottom: 1rem;">医学教育管理系统</p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="tag">B2B</span>
+            <span class="tag">工作流设计</span>
+            <span class="tag">系统设计</span>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Project 3: 卫教云 -->
+      <div class="project-card card border-glow-card" onclick="openModal(2)" style="padding: 0;">
+        <span class="edge-light"></span>
+        <div class="border-glow-inner">
+        <div class="cover-placeholder">
+          <img src="projects/weijiaoyun/%E5%8D%AB%E6%95%99%E4%BA%9101.png" alt="卫教云" />
+        </div>
+        <div class="project-overlay">
+          <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
+        </div>
+        <div style="padding: 1.25rem 1.5rem 1.5rem;">
+          <h3 class="text-card-title" style="margin-bottom: 0.375rem;">卫教云</h3>
+          <p class="text-body" style="font-size: 0.875rem; margin-bottom: 1rem;">医疗健康教育平台</p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="tag">产品设计</span>
+            <span class="tag">UX 优化</span>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Project 4: AI 医生 IP -->
+      <div class="project-card card border-glow-card" onclick="openModal(3)" style="padding: 0;">
+        <span class="edge-light"></span>
+        <div class="border-glow-inner">
+        <div class="cover-placeholder">
+          <img src="projects/ai-doctor/IP-1.png" alt="AI 医生 IP" />
+        </div>
+        <div class="project-overlay">
+          <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
+        </div>
+        <div style="padding: 1.25rem 1.5rem 1.5rem;">
+          <h3 class="text-card-title" style="margin-bottom: 0.375rem;">AI 医生 IP</h3>
+          <p class="text-body" style="font-size: 0.875rem; margin-bottom: 1rem;">AI 医疗助手探索</p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="tag">AI 产品</span>
+            <span class="tag">交互设计</span>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== PROJECT MODAL ===== -->
+<div class="modal-backdrop" id="projectModal" data-component="ProjectModal">
+  <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <line x1="4" y1="4" x2="12" y2="12"/>
+      <line x1="12" y1="4" x2="4" y2="12"/>
+    </svg>
+  </button>
+  <div style="max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem 4rem;" id="modalContent">
+    <!-- Content injected by JS -->
+  </div>
+</div>
+
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="section-padding" data-component="Contact" style="padding-bottom: 0; position: relative; overflow: hidden;">
+  <div class="max-container" style="text-align: center; position: relative; z-index: 1;">
+    <div style="height: 1px; background: linear-gradient(to right, transparent, var(--border-standard), transparent); margin-bottom: clamp(4rem, 8vh, 6rem);"></div>
+
+    <h2 class="text-section-title reveal" style="margin-bottom: 2.5rem;">
+      期待与你沟通。
+    </h2>
+
+    <div class="reveal" style="display: flex; align-items: flex-start; justify-content: center; gap: 3rem; flex-wrap: wrap; transition-delay: 100ms;">
+      <!-- Contact info -->
+      <div style="text-align: left;">
+        <p style="font-size: 1.125rem; font-weight: 500; color: var(--text-primary); margin-bottom: 1rem;">陆亚飞</p>
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+          Tel：<a href="tel:15122556056" style="color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s;" onmouseover="this.style.color='var(--text-primary)'; this.style.borderColor='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'; this.style.borderColor='transparent'">15122556056</a>
+        </p>
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+          Email：<a href="mailto:15122556056@163.com" style="color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s;" onmouseover="this.style.color='var(--text-primary)'; this.style.borderColor='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'; this.style.borderColor='transparent'">15122556056@163.com</a>
+        </p>
+      </div>
+
+      <!-- QR Code -->
+      <div style="text-align: center;">
+        <img src="qr-wechat.png" alt="微信二维码" style="width: 100px; height: 100px; border-radius: 0.5rem; border: 1px solid var(--border-subtle); background: #fff; padding: 4px;" />
+        <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">微信扫码</p>
+      </div>
+    </div>
+
+    <p class="reveal" style="margin-top: 4rem; font-size: 0.8125rem; color: var(--text-tertiary); transition-delay: 200ms;">
+      &copy; 2025 Yafei Lu. 由 AI 协助设计与开发。
+    </p>
+
+    <!-- Back to Top -->
+    <div style="margin-top: 3rem; display: flex; justify-content: flex-end; padding-bottom: 3rem;">
+      <a href="#hero" onclick="event.preventDefault(); window.scrollTo({top:0,behavior:'smooth'});" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: rgba(255,255,255,0.5); transition: color 0.3s ease;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
+        <span style="font-size: 0.8125rem; letter-spacing: 0.05em;">返回顶部</span>
+        <span style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; transition: border-color 0.3s ease;" onmouseover="this.style.borderColor='rgba(255,255,255,0.6)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.25)'">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 12V2M7 2L3 6M7 2L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ShapeGrid Background -->
+  <canvas id="shapeGrid" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; display: block;"></canvas>
+</section>
+
+</main>
+
+
+<script>
+  // ===== Project Data =====
+  const projects = [
+    {
+      title: '华医人才',
+      description: '医疗招聘平台 0-1 全链路设计',
+      role: 'UX/UI 设计师',
+      year: '2024',
+      tags: ['B2B', 'B2C', '0-1 产品设计'],
+      cover: 'projects/medtalent/华医人才01.png',
+      images: [
+        'projects/medtalent/华医人才01.png','projects/medtalent/华医人才02.png','projects/medtalent/华医人才03.png',
+        'projects/medtalent/华医人才04.png','projects/medtalent/华医人才05.png','projects/medtalent/华医人才06.png',
+        'projects/medtalent/华医人才07.png','projects/medtalent/华医人才08.png','projects/medtalent/华医人才PC09.png',
+        'projects/medtalent/华医人才PC10.png','projects/medtalent/华医人才PC11.png','projects/medtalent/华医人才PC12.png',
+        'projects/medtalent/华医人才PC13.png','projects/medtalent/华医人才PC14.png','projects/medtalent/华医人才PC15.png'
+      ]
+    },
+    {
+      title: '住院医师 3.0',
+      description: '医学教育管理系统',
+      role: 'UX/UI 设计师',
+      year: '2023',
+      tags: ['B2B', '流程设计', '系统设计'],
+      cover: 'projects/resident/住院医师01.png',
+      images: [
+        'projects/resident/住院医师01.png','projects/resident/住院医师02.png','projects/resident/住院医师03.png',
+        'projects/resident/住院医师04.png','projects/resident/住院医师05.png','projects/resident/住院医师06.png',
+        'projects/resident/住院医师07.png','projects/resident/住院医师08.png','projects/resident/住院医师09.png',
+        'projects/resident/住院医师10.png'
+      ]
+    },
+    {
+      title: '卫教云',
+      description: '医疗健康教育平台',
+      role: '产品设计师',
+      year: '2023',
+      tags: ['产品设计', '体验优化'],
+      cover: 'projects/weijiaoyun/卫教云01.png',
+      images: [
+        'projects/weijiaoyun/卫教云01.png','projects/weijiaoyun/卫教云02.png','projects/weijiaoyun/卫教云03.png',
+        'projects/weijiaoyun/卫教云04.png','projects/weijiaoyun/卫教云05.png','projects/weijiaoyun/卫教云06.png',
+        'projects/weijiaoyun/卫教云07.png','projects/weijiaoyun/卫教云08.png','projects/weijiaoyun/卫教云09.png',
+        'projects/weijiaoyun/卫教云10.png','projects/weijiaoyun/卫教云11.png'
+      ]
+    },
+    {
+      title: 'AI 医生 IP',
+      description: 'AI 医疗助手产品探索',
+      role: '产品设计师',
+      year: '2024',
+      tags: ['AI 产品', '交互设计'],
+      cover: 'projects/ai-doctor/IP-1.png',
+      images: [
+        'projects/ai-doctor/IP-1.png','projects/ai-doctor/IP-2.png','projects/ai-doctor/IP-3.png',
+        'projects/ai-doctor/IP-4.png','projects/ai-doctor/IP-5.png'
+      ]
+    }
+  ];
+
+  // ===== Modal =====
+  const modal = document.getElementById('projectModal');
+  const modalContent = document.getElementById('modalContent');
+
+  function renderImage(src, alt, fallbackText) {
+    return `
+      <div style="width: 100%; aspect-ratio: 16/9; background: var(--seed-surface); border: 1px solid var(--border-subtle); border-radius: 0.75rem; margin-bottom: 1.5rem; overflow: hidden; position: relative;">
+        <img src="${src}" alt="${alt}" loading="lazy"
+          style="width: 100%; height: 100%; object-fit: cover; display: block;"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span style="display: none; position: absolute; inset: 0; align-items: center; justify-content: center; font-size: 0.875rem; color: var(--text-tertiary);">${fallbackText}</span>
+      </div>
+    `;
+  }
+
+  function openModal(index) {
+    const project = projects[index];
+    let html = `
+      <div style="margin-bottom: 3rem;">
+        <p style="font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 0.75rem;">${project.role} &middot; ${project.year}</p>
+        <h2 style="font-size: 2rem; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 0.75rem;">${project.title}</h2>
+        <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem;">${project.description}</p>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+      </div>
+    `;
+
+    // Image gallery — renders ALL images in the array
+    project.images.forEach((img, i) => {
+      html += renderImage(img, project.title + ' 设计图 ' + (i + 1), '设计图 ' + String(i + 1).padStart(2, '0'));
+    });
+
+    modalContent.innerHTML = html;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    modal.scrollTop = 0;
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // ESC to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Click backdrop to close
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+
+
+
+
+  // ===== Navigation Scroll Effect =====
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+
+  // ===== Scroll Reveal (Intersection Observer) =====
+  const revealElements = document.querySelectorAll('.reveal, .reveal-stagger');
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+  });
+
+  revealElements.forEach(function(el) {
+    observer.observe(el);
+  });
+
+
+  // ===== Responsive Grid Adjustments =====
+  function handleResize() {
+    const width = window.innerWidth;
+    const projectGrid = document.getElementById('projectGrid');
+    const aboutCards = document.getElementById('aboutCards');
+
+    if (width <= 768) {
+      if (projectGrid) projectGrid.style.gridTemplateColumns = '1fr';
+      if (aboutCards) aboutCards.style.gridTemplateColumns = '1fr';
+    } else if (width <= 1024) {
+      if (projectGrid) projectGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+      if (aboutCards) aboutCards.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    } else {
+      if (projectGrid) projectGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+      if (aboutCards) aboutCards.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    }
+  }
+
+  window.addEventListener('resize', handleResize, { passive: true });
+  handleResize();
+
+  // ===== Trigger hero reveal on load =====
+  window.addEventListener('load', function() {
+    document.querySelectorAll('#hero .reveal').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  });
+
+  // ===== BorderGlow Pointer Tracking =====
+  (function() {
+    var cards = document.querySelectorAll('.border-glow-card');
+
+    function getEdgeProximity(card, x, y) {
+      var rect = card.getBoundingClientRect();
+      var cx = rect.width / 2;
+      var cy = rect.height / 2;
+      var dx = x - cx;
+      var dy = y - cy;
+      var kx = dx !== 0 ? cx / Math.abs(dx) : Infinity;
+      var ky = dy !== 0 ? cy / Math.abs(dy) : Infinity;
+      return Math.min(Math.max(1 / Math.min(kx, ky), 0), 1);
+    }
+
+    function getCursorAngle(card, x, y) {
+      var rect = card.getBoundingClientRect();
+      var cx = rect.width / 2;
+      var cy = rect.height / 2;
+      var dx = x - cx;
+      var dy = y - cy;
+      if (dx === 0 && dy === 0) return 0;
+      var radians = Math.atan2(dy, dx);
+      var degrees = radians * (180 / Math.PI) + 90;
+      if (degrees < 0) degrees += 360;
+      return degrees;
+    }
+
+    cards.forEach(function(card) {
+      card.addEventListener('pointermove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var edge = getEdgeProximity(card, x, y);
+        var angle = getCursorAngle(card, x, y);
+        card.style.setProperty('--edge-proximity', (edge * 100).toFixed(3));
+        card.style.setProperty('--cursor-angle', angle.toFixed(3) + 'deg');
+      });
+
+      card.addEventListener('pointerleave', function() {
+        card.style.setProperty('--edge-proximity', '0');
+      });
+    });
+  })();
+
+  // ===== SpotlightCard: Mouse-tracking Radial Gradient =====
+  (function() {
+    var spotlightCards = document.querySelectorAll('.card-spotlight');
+    spotlightCards.forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', x + 'px');
+        card.style.setProperty('--mouse-y', y + 'px');
+      });
+    });
+  })();
+
+  // ===== ShapeGrid: Animated Grid Background in Contact Section =====
+  (function() {
+    var canvas = document.getElementById('shapeGrid');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+
+    var SPEED = 0.5;
+    var SQUARE_SIZE = 40;
+    var BORDER_COLOR = 'rgba(255,255,255,0.06)';
+    var HOVER_FILL = 'rgba(255,255,255,0.04)';
+    var TRAIL_AMOUNT = 5;
+
+    var numSquaresX, numSquaresY;
+    var gridOffset = { x: 0, y: 0 };
+    var hoveredSquare = null;
+    var trailCells = [];
+    var cellOpacities = new Map();
+    var requestRef;
+
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      numSquaresX = Math.ceil(canvas.width / SQUARE_SIZE) + 1;
+      numSquaresY = Math.ceil(canvas.height / SQUARE_SIZE) + 1;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      var offsetX = ((gridOffset.x % SQUARE_SIZE) + SQUARE_SIZE) % SQUARE_SIZE;
+      var offsetY = ((gridOffset.y % SQUARE_SIZE) + SQUARE_SIZE) % SQUARE_SIZE;
+      var cols = Math.ceil(canvas.width / SQUARE_SIZE) + 3;
+      var rows = Math.ceil(canvas.height / SQUARE_SIZE) + 3;
+
+      for (var col = -2; col < cols; col++) {
+        for (var row = -2; row < rows; row++) {
+          var sx = col * SQUARE_SIZE + offsetX;
+          var sy = row * SQUARE_SIZE + offsetY;
+          var cellKey = col + ',' + row;
+          var alpha = cellOpacities.get(cellKey);
+
+          if (alpha) {
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = HOVER_FILL;
+            ctx.fillRect(sx, sy, SQUARE_SIZE, SQUARE_SIZE);
+            ctx.globalAlpha = 1;
+          }
+
+          ctx.strokeStyle = BORDER_COLOR;
+          ctx.strokeRect(sx, sy, SQUARE_SIZE, SQUARE_SIZE);
+        }
+      }
+
+      // Radial vignette overlay
+      var gradient = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 0,
+        canvas.width / 2, canvas.height / 2, Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height) / 2
+      );
+      gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      gradient.addColorStop(1, 'rgba(10, 12, 20, 0.7)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function updateCellOpacities() {
+      var targets = new Map();
+      if (hoveredSquare) {
+        targets.set(hoveredSquare.x + ',' + hoveredSquare.y, 1);
+      }
+      if (TRAIL_AMOUNT > 0) {
+        for (var i = 0; i < trailCells.length; i++) {
+          var t = trailCells[i];
+          var key = t.x + ',' + t.y;
+          if (!targets.has(key)) {
+            targets.set(key, (trailCells.length - i) / (trailCells.length + 1));
+          }
+        }
+      }
+      for (var _i = 0, _keys = targets.keys(); _i < targets.size; _i++) {
+        var k = _keys.next().value;
+        if (!cellOpacities.has(k)) cellOpacities.set(k, 0);
+      }
+      cellOpacities.forEach(function(opacity, key) {
+        var target = targets.get(key) || 0;
+        var next = opacity + (target - opacity) * 0.15;
+        if (next < 0.005) cellOpacities.delete(key);
+        else cellOpacities.set(key, next);
+      });
+    }
+
+    function updateAnimation() {
+      gridOffset.x = (gridOffset.x - SPEED + SQUARE_SIZE) % SQUARE_SIZE;
+      gridOffset.y = (gridOffset.y - SPEED + SQUARE_SIZE) % SQUARE_SIZE;
+      updateCellOpacities();
+      drawGrid();
+      requestRef = requestAnimationFrame(updateAnimation);
+    }
+
+    canvas.addEventListener('mousemove', function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var mouseX = e.clientX - rect.left;
+      var mouseY = e.clientY - rect.top;
+      var offsetX = ((gridOffset.x % SQUARE_SIZE) + SQUARE_SIZE) % SQUARE_SIZE;
+      var offsetY = ((gridOffset.y % SQUARE_SIZE) + SQUARE_SIZE) % SQUARE_SIZE;
+      var adjustedX = mouseX - offsetX;
+      var adjustedY = mouseY - offsetY;
+      var col = Math.floor(adjustedX / SQUARE_SIZE);
+      var row = Math.floor(adjustedY / SQUARE_SIZE);
+
+      if (!hoveredSquare || hoveredSquare.x !== col || hoveredSquare.y !== row) {
+        if (hoveredSquare && TRAIL_AMOUNT > 0) {
+          trailCells.unshift({ x: hoveredSquare.x, y: hoveredSquare.y });
+          if (trailCells.length > TRAIL_AMOUNT) trailCells.length = TRAIL_AMOUNT;
+        }
+        hoveredSquare = { x: col, y: row };
+      }
+    });
+
+    canvas.addEventListener('mouseleave', function() {
+      if (hoveredSquare && TRAIL_AMOUNT > 0) {
+        trailCells.unshift({ x: hoveredSquare.x, y: hoveredSquare.y });
+        if (trailCells.length > TRAIL_AMOUNT) trailCells.length = TRAIL_AMOUNT;
+      }
+      hoveredSquare = null;
+    });
+
+    requestRef = requestAnimationFrame(updateAnimation);
+  })();
+
+</script>
+
+<script>
+(function() {
+  var carousel = document.getElementById('projectCarousel');
+  if (!carousel) return;
+  var navContainer = document.getElementById('carouselNav');
+  var cards = carousel.querySelectorAll('.carousel-card');
+  var numCards = cards.length;
+
+  var CARD_SPACING = 420;
+  var currentScroll = 0;
+  var targetScroll = 0;
+  var isDragging = false;
+  var dragStartX = 0;
+  var dragStartScroll = 0;
+  var dragThreshold = 5;
+  var hasDragged = false;
+
+  // Create navigation dots
+  for (var i = 0; i < numCards; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', '项目 ' + (i + 1));
+    dot.dataset.index = i;
+    dot.addEventListener('click', (function(idx) {
+      return function() {
+        targetScroll = idx * CARD_SPACING;
+      };
+    })(i));
+    navContainer.appendChild(dot);
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+  function snapToNearest() {
+    var nearest = Math.round(targetScroll / CARD_SPACING);
+    nearest = clamp(nearest, 0, numCards - 1);
+    targetScroll = nearest * CARD_SPACING;
+  }
+
+  function update() {
+    currentScroll = lerp(currentScroll, targetScroll, 0.08);
+
+    var activeIndex = Math.round(currentScroll / CARD_SPACING);
+    activeIndex = clamp(activeIndex, 0, numCards - 1);
+
+    cards.forEach(function(card, i) {
+      var cardCenter = i * CARD_SPACING;
+      var offset = currentScroll - cardCenter;
+      var absOffset = Math.abs(offset);
+      var sign = offset === 0 ? 0 : (offset > 0 ? 1 : -1);
+
+      // Scale: center card is 1.0, side cards are smaller
+      var scale = Math.max(0.72, 1 - absOffset * 0.00055);
+
+      // Slight Y-axis rotation for curved feel
+      var rotY = -sign * Math.min(absOffset * 0.035, 14);
+
+      // Slight vertical offset for depth
+      var translateY = absOffset * absOffset * 0.00008;
+
+      // Opacity: fade cards that are far away
+      var opacity = absOffset > CARD_SPACING * 1.5 ? 0 : Math.max(0.4, 1 - absOffset * 0.001);
+
+      // Blur for far cards
+      var blur = absOffset > CARD_SPACING * 0.8 ? (absOffset - CARD_SPACING * 0.8) * 0.005 : 0;
+
+      // Z-index: center card on top
+      var zIdx = 10 - Math.round(absOffset / 50);
+
+      card.style.transform = 'translateX(' + (cardCenter - currentScroll) + 'px) translateY(' + translateY + 'px) scale(' + scale.toFixed(4) + ') rotateY(' + rotY.toFixed(2) + 'deg)';
+      card.style.opacity = opacity.toFixed(3);
+      card.style.filter = blur > 0.1 ? 'blur(' + blur.toFixed(1) + 'px)' : 'none';
+      card.style.zIndex = zIdx;
+
+      if (absOffset < CARD_SPACING * 0.5) {
+        card.style.boxShadow = '0 0 40px rgba(39, 119, 222, 0.1), 0 8px 32px rgba(0,0,0,0.5)';
+      } else {
+        card.style.boxShadow = '0 4px 24px rgba(0,0,0,0.4)';
+      }
+    });
+
+    // Update dots
+    var dots = navContainer.querySelectorAll('.carousel-dot');
+    dots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  // Mouse drag
+  carousel.addEventListener('mousedown', function(e) {
+    isDragging = true;
+    hasDragged = false;
+    dragStartX = e.clientX;
+    dragStartScroll = targetScroll;
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    var dx = e.clientX - dragStartX;
+    if (Math.abs(dx) > dragThreshold) hasDragged = true;
+    targetScroll = clamp(dragStartScroll - dx, -CARD_SPACING * 0.5, (numCards - 1) * CARD_SPACING + CARD_SPACING * 0.5);
+  });
+
+  window.addEventListener('mouseup', function() {
+    if (!isDragging) return;
+    isDragging = false;
+    snapToNearest();
+  });
+
+  // Prevent card click during drag
+  cards.forEach(function(card) {
+    card.addEventListener('click', function(e) {
+      if (hasDragged) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }, true);
+  });
+
+  // Touch drag
+  carousel.addEventListener('touchstart', function(e) {
+    isDragging = true;
+    hasDragged = false;
+    dragStartX = e.touches[0].clientX;
+    dragStartScroll = targetScroll;
+  }, { passive: true });
+
+  carousel.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    var dx = e.touches[0].clientX - dragStartX;
+    if (Math.abs(dx) > dragThreshold) hasDragged = true;
+    targetScroll = clamp(dragStartScroll - dx, -CARD_SPACING * 0.5, (numCards - 1) * CARD_SPACING + CARD_SPACING * 0.5);
+  }, { passive: true });
+
+  carousel.addEventListener('touchend', function() {
+    isDragging = false;
+    snapToNearest();
+  });
+
+  // Wheel scroll
+  carousel.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    targetScroll += delta * 0.8;
+    targetScroll = clamp(targetScroll, -CARD_SPACING * 0.5, (numCards - 1) * CARD_SPACING + CARD_SPACING * 0.5);
+    snapToNearest();
+  }, { passive: false });
+
+  // Keyboard navigation
+  carousel.setAttribute('tabindex', '0');
+  carousel.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      targetScroll -= CARD_SPACING;
+      snapToNearest();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      targetScroll += CARD_SPACING;
+      snapToNearest();
+    }
+  });
+
+  requestAnimationFrame(update);
+})();
+</script>
+
+<script>
+(function() {
+  var container = document.getElementById('workflowSteps');
+  if (!container) return;
+
+  var steps = container.querySelectorAll('.workflow-step');
+  var images = document.querySelectorAll('#workflowImagePanel .workflow-image');
+  var activeIndex = 0;
+
+  function setActive(index) {
+    activeIndex = index;
+    steps.forEach(function(step, i) {
+      step.classList.toggle('is-active', i === index);
+    });
+    images.forEach(function(img, i) {
+      img.classList.toggle('is-visible', i === index);
+    });
+  }
+
+  steps.forEach(function(step) {
+    step.addEventListener('mouseenter', function() {
+      var idx = parseInt(this.dataset.index);
+      setActive(idx);
+    });
+
+    step.addEventListener('click', function() {
+      var idx = parseInt(this.dataset.index);
+      setActive(idx);
+    });
+  });
+
+  // Default: first step active
+  setActive(0);
+})();
+</script>
+
+</body>
+</html>
