@@ -64,10 +64,8 @@
 
     /* ===== Alibaba PuHuiTi Font Family ===== */
     @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
-    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
     @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; font-display: swap; }
     @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
-    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Heavy.ttf') format('truetype'); font-weight: 900; font-style: normal; font-display: swap; }
 
     body {
       background-color: var(--seed-bg);
@@ -372,7 +370,7 @@
       overflow: hidden;
       padding-top: 4rem;
       background-color: #0a0c14;
-      background-image: url('hero-bg.png');
+      background-image: url('hero-bg.jpg');
       background-size: cover;
       background-position: center right;
       background-repeat: no-repeat;
@@ -657,7 +655,7 @@
 
     .workflow-image-num {
       font-size: 5rem;
-      font-weight: 900;
+      font-weight: 700;
       line-height: 1;
       background: linear-gradient(180deg, rgba(39,119,222,0.3), rgba(39,119,222,0.05));
       -webkit-background-clip: text;
@@ -1006,7 +1004,7 @@
 <!-- ===== HERO ===== -->
 <section id="hero" class="hero-section" data-component="Hero">
   <!-- Background video -->
-  <video class="hero-video" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="hero-bg.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
     <source src="hero-video.mp4" type="video/mp4">
   </video>
 
@@ -1083,19 +1081,19 @@
       <div class="reveal" style="transition-delay: 200ms;">
         <!-- Highlight badges -->
         <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem; align-items: baseline;">
-          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 900; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">6</span> <span style="color: var(--text-primary);">年经验</span></span>
-          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 900; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">全链路</span><span style="color: var(--text-primary);">设计师</span></span>
-          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 900; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">AIGC</span> <span style="color: var(--text-primary);">辅助工作</span></span>
+          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 700; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">6</span> <span style="color: var(--text-primary);">年经验</span></span>
+          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 700; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">全链路</span><span style="color: var(--text-primary);">设计师</span></span>
+          <span style="font-size: 1.125rem; font-weight: 500;"><span class="badge-highlight" style="font-size: 2.25rem; font-weight: 700; font-style: italic; display: inline-block; transform: skewX(-5deg); line-height: 1; background-image: linear-gradient(180deg, #5CFFE4, #0829DA); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">AIGC</span> <span style="color: var(--text-primary);">辅助工作</span></span>
         </div>
 
         <!-- Work Experience 1 -->
         <div style="margin-bottom: 2rem;">
           <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
-            <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; font-weight: 300;">2022.1 — 2026.5</span>
+            <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; font-weight: 400;">2022.1 — 2026.5</span>
             <span style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">北京华医网科技股份有限公司</span>
           </div>
           <p style="font-size: 0.875rem; color: #2777DE; margin-bottom: 0.75rem; font-weight: 500;">UI/UX 设计师</p>
-          <div style="font-size: 0.8125rem; color: #A1A1AA; line-height: 1.85; font-weight: 300;">
+          <div style="font-size: 0.8125rem; color: #A1A1AA; line-height: 1.85; font-weight: 400;">
             <p style="margin-bottom: 0.375rem; padding-left: 1rem; text-indent: -1rem;">1. 负责医疗招聘、院内医师规培、医疗继续教育产品 UI/UX 设计，涵盖 B 端管理平台、C 端移动应用及 PC 端。</p>
             <p style="padding-left: 1rem; text-indent: -1rem;">2. 参与多个 0→1 项目，从需求分析、竞品调研、信息架构、交互设计到视觉设计及开发协作，成功推动产品上线。</p>
           </div>
@@ -1104,11 +1102,11 @@
         <!-- Work Experience 2 -->
         <div>
           <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
-            <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; font-weight: 300;">2020.6 — 2022.1</span>
+            <span style="font-size: 0.8125rem; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; font-weight: 400;">2020.6 — 2022.1</span>
             <span style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">北京云美家科技有限公司</span>
           </div>
           <p style="font-size: 0.875rem; color: #2777DE; margin-bottom: 0.75rem; font-weight: 500;">UI 设计师</p>
-          <div style="font-size: 0.8125rem; color: #A1A1AA; line-height: 1.85; font-weight: 300;">
+          <div style="font-size: 0.8125rem; color: #A1A1AA; line-height: 1.85; font-weight: 400;">
             <p style="margin-bottom: 0.375rem; padding-left: 1rem; text-indent: -1rem;">1. 负责百度家装图标设计，为百度家装 App 进行改版设计。</p>
             <p style="margin-bottom: 0.375rem; padding-left: 1rem; text-indent: -1rem;">2. 负责百度直播广告设计。</p>
             <p style="padding-left: 1rem; text-indent: -1rem;">3. 建立蓝鲸美家小程序 UI 设计标准，实现跨平台一致性。</p>
@@ -1215,7 +1213,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/medtalent/%E5%8D%8E%E5%8C%BB%E4%BA%BA%E6%89%8D01.png" alt="华医人才" />
+          <img src="projects/medtalent/%E5%8D%8E%E5%8C%BB%E4%BA%BA%E6%89%8D01.jpg" alt="华医人才" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1237,7 +1235,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/resident/%E4%BD%8F%E9%99%A2%E5%8C%BB%E5%B8%8801.png" alt="住院医师 3.0" />
+          <img src="projects/resident/%E4%BD%8F%E9%99%A2%E5%8C%BB%E5%B8%8801.jpg" alt="住院医师 3.0" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1259,7 +1257,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/weijiaoyun/%E5%8D%AB%E6%95%99%E4%BA%9101.png" alt="卫教云" />
+          <img src="projects/weijiaoyun/%E5%8D%AB%E6%95%99%E4%BA%9101.jpg" alt="卫教云" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1280,7 +1278,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/ai-doctor/IP-1.png" alt="AI 医生 IP" />
+          <img src="projects/ai-doctor/IP-1.jpg" alt="AI 医生 IP" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1375,13 +1373,13 @@
       role: 'UX/UI 设计师',
       year: '2024',
       tags: ['B2B', 'B2C', '0-1 产品设计'],
-      cover: 'projects/medtalent/华医人才01.png',
+      cover: 'projects/medtalent/华医人才01.jpg',
       images: [
-        'projects/medtalent/华医人才01.png','projects/medtalent/华医人才02.png','projects/medtalent/华医人才03.png',
-        'projects/medtalent/华医人才04.png','projects/medtalent/华医人才05.png','projects/medtalent/华医人才06.png',
-        'projects/medtalent/华医人才07.png','projects/medtalent/华医人才08.png','projects/medtalent/华医人才PC09.png',
-        'projects/medtalent/华医人才PC10.png','projects/medtalent/华医人才PC11.png','projects/medtalent/华医人才PC12.png',
-        'projects/medtalent/华医人才PC13.png','projects/medtalent/华医人才PC14.png','projects/medtalent/华医人才PC15.png'
+        'projects/medtalent/华医人才01.jpg','projects/medtalent/华医人才02.jpg','projects/medtalent/华医人才03.jpg',
+        'projects/medtalent/华医人才04.jpg','projects/medtalent/华医人才05.jpg','projects/medtalent/华医人才06.jpg',
+        'projects/medtalent/华医人才07.jpg','projects/medtalent/华医人才08.jpg','projects/medtalent/华医人才PC09.jpg',
+        'projects/medtalent/华医人才PC10.jpg','projects/medtalent/华医人才PC11.jpg','projects/medtalent/华医人才PC12.jpg',
+        'projects/medtalent/华医人才PC13.jpg','projects/medtalent/华医人才PC14.jpg','projects/medtalent/华医人才PC15.jpg'
       ]
     },
     {
@@ -1390,12 +1388,12 @@
       role: 'UX/UI 设计师',
       year: '2023',
       tags: ['B2B', '流程设计', '系统设计'],
-      cover: 'projects/resident/住院医师01.png',
+      cover: 'projects/resident/住院医师01.jpg',
       images: [
-        'projects/resident/住院医师01.png','projects/resident/住院医师02.png','projects/resident/住院医师03.png',
-        'projects/resident/住院医师04.png','projects/resident/住院医师05.png','projects/resident/住院医师06.png',
-        'projects/resident/住院医师07.png','projects/resident/住院医师08.png','projects/resident/住院医师09.png',
-        'projects/resident/住院医师10.png'
+        'projects/resident/住院医师01.jpg','projects/resident/住院医师02.jpg','projects/resident/住院医师03.jpg',
+        'projects/resident/住院医师04.jpg','projects/resident/住院医师05.jpg','projects/resident/住院医师06.jpg',
+        'projects/resident/住院医师07.jpg','projects/resident/住院医师08.jpg','projects/resident/住院医师09.jpg',
+        'projects/resident/住院医师10.jpg'
       ]
     },
     {
@@ -1404,12 +1402,12 @@
       role: '产品设计师',
       year: '2023',
       tags: ['产品设计', '体验优化'],
-      cover: 'projects/weijiaoyun/卫教云01.png',
+      cover: 'projects/weijiaoyun/卫教云01.jpg',
       images: [
-        'projects/weijiaoyun/卫教云01.png','projects/weijiaoyun/卫教云02.png','projects/weijiaoyun/卫教云03.png',
-        'projects/weijiaoyun/卫教云04.png','projects/weijiaoyun/卫教云05.png','projects/weijiaoyun/卫教云06.png',
-        'projects/weijiaoyun/卫教云07.png','projects/weijiaoyun/卫教云08.png','projects/weijiaoyun/卫教云09.png',
-        'projects/weijiaoyun/卫教云10.png','projects/weijiaoyun/卫教云11.png'
+        'projects/weijiaoyun/卫教云01.jpg','projects/weijiaoyun/卫教云02.jpg','projects/weijiaoyun/卫教云03.jpg',
+        'projects/weijiaoyun/卫教云04.jpg','projects/weijiaoyun/卫教云05.jpg','projects/weijiaoyun/卫教云06.jpg',
+        'projects/weijiaoyun/卫教云07.jpg','projects/weijiaoyun/卫教云08.jpg','projects/weijiaoyun/卫教云09.jpg',
+        'projects/weijiaoyun/卫教云10.jpg','projects/weijiaoyun/卫教云11.jpg'
       ]
     },
     {
@@ -1418,10 +1416,10 @@
       role: '产品设计师',
       year: '2024',
       tags: ['AI 产品', '交互设计'],
-      cover: 'projects/ai-doctor/IP-1.png',
+      cover: 'projects/ai-doctor/IP-1.jpg',
       images: [
-        'projects/ai-doctor/IP-1.png','projects/ai-doctor/IP-2.png','projects/ai-doctor/IP-3.png',
-        'projects/ai-doctor/IP-4.png','projects/ai-doctor/IP-5.png'
+        'projects/ai-doctor/IP-1.jpg','projects/ai-doctor/IP-2.jpg','projects/ai-doctor/IP-3.jpg',
+        'projects/ai-doctor/IP-4.jpg','projects/ai-doctor/IP-5.jpg'
       ]
     }
   ];
@@ -1693,7 +1691,20 @@
       });
     }
 
+    // Pause canvas animation when contact section is off-screen
+    var isRunning = true;
+    var section = canvas.closest('section');
+    if (section) {
+      var canvasObserver = new IntersectionObserver(function(entries) {
+        var wasRunning = isRunning;
+        isRunning = entries[0].isIntersecting;
+        if (isRunning && !wasRunning) requestRef = requestAnimationFrame(updateAnimation);
+      }, { threshold: 0 });
+      canvasObserver.observe(section);
+    }
+
     function updateAnimation() {
+      if (!isRunning) return;
       gridOffset.x = (gridOffset.x - SPEED + SQUARE_SIZE) % SQUARE_SIZE;
       gridOffset.y = (gridOffset.y - SPEED + SQUARE_SIZE) % SQUARE_SIZE;
       updateCellOpacities();
