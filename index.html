@@ -10,7 +10,7 @@
   <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,7 +19,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', '"Alibaba PuHuiTi"', '"Source Han Sans"', 'system-ui', 'sans-serif'],
+            sans: ['Inter', '"Noto Sans SC"', '"Source Han Sans"', 'system-ui', 'sans-serif'],
           },
         },
       },
@@ -62,15 +62,10 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ===== Alibaba PuHuiTi Font Family ===== */
-    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
-    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; font-display: swap; }
-    @font-face { font-family: 'Alibaba PuHuiTi'; src: url('Alibaba-PuHuiTi-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
-
     body {
       background-color: var(--seed-bg);
       color: var(--text-primary);
-      font-family: 'Alibaba PuHuiTi', 'Inter', system-ui, sans-serif;
+      font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
       font-feature-settings: "cv01", "ss03";
       line-height: 1.5;
       overflow-x: hidden;
@@ -1103,12 +1098,12 @@
 <!-- ===== ABOUT ME ===== -->
 <section id="about" class="section-padding" data-component="About" style="position: relative; overflow: hidden;">
   <!-- Waveform decoration on the left -->
-  <img src="about-waveform.png" alt="" style="position: absolute; left: -2%; top: 50%; transform: translateY(-50%); width: 18%; max-width: 280px; opacity: 0.35; pointer-events: none; z-index: 0;" />
+  <img src="about-waveform.png" alt="" loading="lazy" style="position: absolute; left: -2%; top: 50%; transform: translateY(-50%); width: 18%; max-width: 280px; opacity: 0.35; pointer-events: none; z-index: 0;" />
 
   <div class="max-container" style="position: relative; z-index: 1;">
     <!-- Section Title with 3D cube icon -->
     <div class="reveal" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 3.5rem;">
-      <img src="about-cube.png" alt="" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;" />
+      <img src="about-cube.png" alt="" loading="lazy" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0;" />
       <h2 style="font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em;">你好，初次见面</h2>
     </div>
 
@@ -1233,19 +1228,19 @@
         <div class="workflow-gradient" data-index="4" style="background-image: url('ai-process/step-validation.jpg');"></div>
         <!-- Screenshot layer: vertical slide -->
         <div class="workflow-screenshot is-visible" data-index="0">
-          <img src="ai-process/screenshot-01.jpg" alt="AI 写代码" />
+          <img src="ai-process/screenshot-01.jpg" alt="AI 写代码" loading="lazy" />
         </div>
         <div class="workflow-screenshot" data-index="1">
-          <img src="ai-process/screenshot-02.jpg" alt="搭建整体框架" />
+          <img src="ai-process/screenshot-02.jpg" alt="搭建整体框架" loading="lazy" />
         </div>
         <div class="workflow-screenshot" data-index="2">
-          <img src="ai-process/screenshot-03.jpg" alt="填充个人素材" />
+          <img src="ai-process/screenshot-03.jpg" alt="填充个人素材" loading="lazy" />
         </div>
         <div class="workflow-screenshot" data-index="3">
-          <img src="ai-process/screenshot-04.jpg" alt="GitHub 备份存档" />
+          <img src="ai-process/screenshot-04.jpg" alt="GitHub 备份存档" loading="lazy" />
         </div>
         <div class="workflow-screenshot" data-index="4">
-          <img src="ai-process/screenshot-05.jpg" alt="网站部署上线" />
+          <img src="ai-process/screenshot-05.jpg" alt="网站部署上线" loading="lazy" />
         </div>
       </div>
     </div>
@@ -1265,7 +1260,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/medtalent/%E5%8D%8E%E5%8C%BB%E4%BA%BA%E6%89%8D01.jpg" alt="华医人才" />
+          <img src="projects/medtalent/%E5%8D%8E%E5%8C%BB%E4%BA%BA%E6%89%8D01.jpg" alt="华医人才" loading="lazy" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1287,7 +1282,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/resident/%E4%BD%8F%E9%99%A2%E5%8C%BB%E5%B8%8801.jpg" alt="住院医师 3.0" />
+          <img src="projects/resident/%E4%BD%8F%E9%99%A2%E5%8C%BB%E5%B8%8801.jpg" alt="住院医师 3.0" loading="lazy" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1309,7 +1304,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/weijiaoyun/%E5%8D%AB%E6%95%99%E4%BA%9101.jpg" alt="卫教云" />
+          <img src="projects/weijiaoyun/%E5%8D%AB%E6%95%99%E4%BA%9101.jpg" alt="卫教云" loading="lazy" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1330,7 +1325,7 @@
         <span class="edge-light"></span>
         <div class="border-glow-inner">
         <div class="cover-placeholder">
-          <img src="projects/ai-doctor/IP-1.jpg" alt="AI 医生 IP" />
+          <img src="projects/ai-doctor/IP-1.jpg" alt="AI 医生 IP" loading="lazy" />
         </div>
         <div class="project-overlay">
           <span style="font-size: 0.8125rem; font-weight: 500; color: var(--text-primary);">查看项目 &rarr;</span>
@@ -1387,7 +1382,7 @@
 
       <!-- QR Code -->
       <div style="text-align: center;">
-        <img src="qr-wechat.png" alt="微信二维码" style="width: 100px; height: 100px; border-radius: 0.5rem; border: 1px solid var(--border-subtle); background: #fff; padding: 4px;" />
+        <img src="qr-wechat.png" alt="微信二维码" loading="lazy" style="width: 100px; height: 100px; border-radius: 0.5rem; border: 1px solid var(--border-subtle); background: #fff; padding: 4px;" />
         <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">微信扫码</p>
       </div>
     </div>
