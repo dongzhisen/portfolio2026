@@ -625,21 +625,61 @@
       border-radius: 1rem;
       overflow: hidden;
       background: #0a0a0a;
-      border: 1px solid rgba(255,255,255,0.06);
     }
 
-    .workflow-image {
+    /* Gradient layer: crossfade */
+    .workflow-gradient {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      z-index: 0;
+    }
+
+    .workflow-gradient.is-visible {
+      opacity: 1;
+    }
+
+    /* Screenshot layer: vertical slide */
+    .workflow-screenshot {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transform: translateY(100%);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
     }
 
-    .workflow-image.is-visible {
+    .workflow-screenshot.is-visible {
       opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .workflow-screenshot.is-leaving-up {
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .workflow-screenshot.is-leaving-down {
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .workflow-screenshot img {
+      width: 80%;
+      height: auto;
+      max-height: 80%;
+      object-fit: contain;
+      border-radius: 10px;
     }
 
     .workflow-image-inner {
@@ -651,23 +691,43 @@
       justify-content: center;
       gap: 1rem;
       padding: 2rem;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .workflow-image-inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: 0;
+    }
+
+    .workflow-image-inner.no-overlay::after {
+      display: none;
+    }
+
+    .workflow-image-num,
+    .workflow-image-label {
+      position: relative;
+      z-index: 1;
     }
 
     .workflow-image-num {
       font-size: 5rem;
       font-weight: 700;
       line-height: 1;
-      background: linear-gradient(180deg, rgba(39,119,222,0.3), rgba(39,119,222,0.05));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: rgba(255,255,255,0.85);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
     }
 
     .workflow-image-label {
       font-size: 1.125rem;
       font-weight: 600;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.7);
       letter-spacing: 0.1em;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.3);
     }
 
     @media (max-width: 768px) {
@@ -1137,63 +1197,55 @@
       <div class="workflow-steps" id="workflowSteps">
 
         <div class="workflow-step is-active" data-index="0">
-          <div class="workflow-step-title">调研</div>
-          <div class="workflow-step-desc">AI 辅助用户研究、竞品分析与需求探索 — 发现真正值得解决的问题。</div>
+          <div class="workflow-step-title">AI 写代码</div>
+          <div class="workflow-step-desc">零基础不用懂编程，说清需求就能生成网页代码。</div>
         </div>
 
         <div class="workflow-step" data-index="1">
-          <div class="workflow-step-title">探索</div>
-          <div class="workflow-step-desc">快速生成多个设计方向 — 借助 AI 扩展解空间，再聚焦到最优方案。</div>
+          <div class="workflow-step-title">搭建整体框架</div>
+          <div class="workflow-step-desc">先定页面大纲，再微调细节，效率翻倍。</div>
         </div>
 
         <div class="workflow-step" data-index="2">
-          <div class="workflow-step-title">原型</div>
-          <div class="workflow-step-desc">创建高保真产品原型，清晰传达体验 — 在流程早期支持更好的决策。</div>
+          <div class="workflow-step-title">填充个人素材</div>
+          <div class="workflow-step-desc">导入本地图片、文档，快速丰富页面内容。</div>
         </div>
 
         <div class="workflow-step" data-index="3">
-          <div class="workflow-step-title">Vibe Coding</div>
-          <div class="workflow-step-desc">通过 AI 辅助编码将设计想法转化为交互 Demo — 弥合设计与实现之间的鸿沟。</div>
+          <div class="workflow-step-title">GitHub 备份存档</div>
+          <div class="workflow-step-desc">每次更新存一版，随时回退历史版本。</div>
         </div>
 
         <div class="workflow-step" data-index="4">
-          <div class="workflow-step-title">验证</div>
-          <div class="workflow-step-desc">收集反馈、改进方案 — 用真实证据而非假设进行迭代，借助快速 AI 原型驱动。</div>
+          <div class="workflow-step-title">网站部署上线</div>
+          <div class="workflow-step-desc">生成公开网址，分享链接就能对外展示。</div>
         </div>
 
       </div>
 
       <!-- Right: Image Panel -->
       <div class="workflow-image-panel" id="workflowImagePanel">
-        <div class="workflow-image is-visible" data-index="0">
-          <div class="workflow-image-inner">
-            <div class="workflow-image-num">01</div>
-            <div class="workflow-image-label">调 研</div>
-          </div>
+        <!-- Gradient layer: crossfade -->
+        <div class="workflow-gradient is-visible" data-index="0" style="background-image: url('ai-process/step-research.jpg');"></div>
+        <div class="workflow-gradient" data-index="1" style="background-image: url('ai-process/step-exploration.jpg');"></div>
+        <div class="workflow-gradient" data-index="2" style="background-image: url('ai-process/step-prototype.jpg');"></div>
+        <div class="workflow-gradient" data-index="3" style="background-image: url('ai-process/step-vibecoding.jpg');"></div>
+        <div class="workflow-gradient" data-index="4" style="background-image: url('ai-process/step-validation.jpg');"></div>
+        <!-- Screenshot layer: vertical slide -->
+        <div class="workflow-screenshot is-visible" data-index="0">
+          <img src="ai-process/screenshot-01.jpg" alt="AI 写代码" />
         </div>
-        <div class="workflow-image" data-index="1">
-          <div class="workflow-image-inner">
-            <div class="workflow-image-num">02</div>
-            <div class="workflow-image-label">探 索</div>
-          </div>
+        <div class="workflow-screenshot" data-index="1">
+          <img src="ai-process/screenshot-02.jpg" alt="搭建整体框架" />
         </div>
-        <div class="workflow-image" data-index="2">
-          <div class="workflow-image-inner">
-            <div class="workflow-image-num">03</div>
-            <div class="workflow-image-label">原 型</div>
-          </div>
+        <div class="workflow-screenshot" data-index="2">
+          <img src="ai-process/screenshot-03.jpg" alt="填充个人素材" />
         </div>
-        <div class="workflow-image" data-index="3">
-          <div class="workflow-image-inner">
-            <div class="workflow-image-num">04</div>
-            <div class="workflow-image-label">VIBE CODING</div>
-          </div>
+        <div class="workflow-screenshot" data-index="3">
+          <img src="ai-process/screenshot-04.jpg" alt="GitHub 备份存档" />
         </div>
-        <div class="workflow-image" data-index="4">
-          <div class="workflow-image-inner">
-            <div class="workflow-image-num">05</div>
-            <div class="workflow-image-label">验 证</div>
-          </div>
+        <div class="workflow-screenshot" data-index="4">
+          <img src="ai-process/screenshot-05.jpg" alt="网站部署上线" />
         </div>
       </div>
     </div>
@@ -1921,17 +1973,49 @@
   if (!container) return;
 
   var steps = container.querySelectorAll('.workflow-step');
-  var images = document.querySelectorAll('#workflowImagePanel .workflow-image');
+  var gradients = document.querySelectorAll('#workflowImagePanel .workflow-gradient');
+  var screenshots = document.querySelectorAll('#workflowImagePanel .workflow-screenshot');
   var activeIndex = 0;
 
   function setActive(index) {
+    if (index === activeIndex) return;
+    var prevIndex = activeIndex;
+    var goingForward = index > prevIndex;
     activeIndex = index;
     steps.forEach(function(step, i) {
       step.classList.toggle('is-active', i === index);
     });
-    images.forEach(function(img, i) {
-      img.classList.toggle('is-visible', i === index);
+
+    // Gradient: simple crossfade
+    gradients.forEach(function(g, i) {
+      g.classList.toggle('is-visible', i === index);
     });
+
+    // Screenshot: directional vertical slide
+    var prevShot = screenshots[prevIndex];
+    var nextShot = screenshots[index];
+
+    screenshots.forEach(function(s) {
+      s.classList.remove('is-visible', 'is-leaving-up', 'is-leaving-down');
+    });
+
+    if (nextShot) {
+      nextShot.style.transition = 'none';
+      nextShot.style.transform = goingForward ? 'translateY(100%)' : 'translateY(-100%)';
+      nextShot.style.opacity = '0';
+      nextShot.offsetHeight;
+      nextShot.style.transition = '';
+      nextShot.style.transform = '';
+      nextShot.style.opacity = '';
+      nextShot.classList.add('is-visible');
+    }
+
+    if (prevShot) {
+      prevShot.classList.add(goingForward ? 'is-leaving-up' : 'is-leaving-down');
+      setTimeout(function() {
+        prevShot.classList.remove('is-leaving-up', 'is-leaving-down');
+      }, 500);
+    }
   }
 
   steps.forEach(function(step) {
